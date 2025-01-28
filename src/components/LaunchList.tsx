@@ -94,7 +94,7 @@ const LaunchList: React.FC = () => {
       setHasMore(true);
       setFilteredLaunches([]); // Clear previous filtered results
       setFilteredLaunches([]); // Clear previous filtered results
-      fetchLaunches(true,1);
+      fetchLaunches(true, 1);
     }
   }, [debouncedSearchQuery]);
 
@@ -130,7 +130,7 @@ const LaunchList: React.FC = () => {
           ) : (
             filteredLaunches.map((launch) => (
               <div
-                className="flex flex-col h-auto p-4 rounded-lg shadow-lg w-[37vw] min-w-[338px] bg-[#971a1a] z-40 hover:shadow-xl transition duration-300 ease-in-out mb-4"
+                className="flex flex-col h-auto p-4 rounded-lg shadow-lg w-[37vw] min-w-[338px] bg-[#f7f7f7] z-40 hover:shadow-xl transition duration-300 ease-in-out mb-4"
                 key={launch.flight_number}
               >
                 <LaunchItem launch={launch} />
