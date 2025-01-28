@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx", // for React 17+ (or use "react" for older versions)
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "module": "esnext",
+    "target": "esnext"
+  }
+}
