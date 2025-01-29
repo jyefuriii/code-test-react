@@ -66,14 +66,13 @@ const LaunchList: React.FC = () => {
         });
 
         if (reset) {
-          setLaunches(data); // Reset and set fetched data
-          setAllLaunches(data); // Store the fetched data for search purposes
+          setLaunches(data); 
+          setAllLaunches(data); 
         } else {
           setLaunches((prevLaunches) => [...prevLaunches, ...data]);
-          setAllLaunches((prevLaunches) => [...prevLaunches, ...data]);
         }
 
-        setHasMore(data.length > 0); // Stop fetching if no more data
+        setHasMore(data.length > 0);
         setError(null);
       } catch (err) {
         const error = err as Error;
@@ -81,25 +80,25 @@ const LaunchList: React.FC = () => {
         console.error("Error fetching launches", error.message);
       } finally {
         setLoading(false);
-        setLazyLoading(false); // Stop lazy loading spinner
+        setLazyLoading(false); 
       }
     },
     [page]
   );
 
   useEffect(() => {
-    setLoading(true); // Show spinner for initial load
+    setLoading(true); 
     if (debouncedSearchQuery.trim() === "") {
-      setPage(1); // Reset to the first page
+      setPage(1); 
       setHasMore(true);
-      setFilteredLaunches([]); // Clear previous filtered results
-      setFilteredLaunches([]); // Clear previous filtered results
+      setFilteredLaunches([]); 
+      setFilteredLaunches([]); 
       fetchLaunches(true, 1);
     }
   }, [debouncedSearchQuery]);
 
   useEffect(() => {
-    if (debouncedSearchQuery.trim() !== "") return; // Avoid triggering pagination during search
+    if (debouncedSearchQuery.trim() !== "") return; 
     fetchLaunches();
   }, [page]);
 
@@ -113,16 +112,16 @@ const LaunchList: React.FC = () => {
         )
       );
     } else {
-      setFilteredLaunches([]); // Clear filtered results when search is cleared
+      setFilteredLaunches([]); 
     }
   }, [debouncedSearchQuery]);
 
   return (
     <div className="p-4 flex flex-col items-center">
-      {/* Ensure the SearchBar is working */}
+     
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
-      {/* Conditionally render launches based on search query */}
+     
       {debouncedSearchQuery.trim() ? (
         <div className="relative flex flex-col w-[37vw] min-w-[338px] mt-42">
           {filteredLaunches.length === 0 ? (
@@ -166,11 +165,11 @@ const LaunchList: React.FC = () => {
         </div>
       )}
 
-      {/* Show spinner for lazy loading */}
+      
       {lazyLoading && <Loading />}
-      {/* Show error message */}
+      
       {error && <p className="text-red-500 text-center">{error}</p>}
-      {/* No more launches message */}
+      
       {!hasMore && !loading && launches.length > 0 && (
         <p className="text-center mt-4">No more launches to show</p>
       )}

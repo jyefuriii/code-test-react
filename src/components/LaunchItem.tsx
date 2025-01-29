@@ -26,10 +26,10 @@ interface LaunchItemProps {
 }
 
 const LaunchItem: React.FC<LaunchItemProps> = ({ launch }) => {
-  const [showDetails, setShowDetails] = useState<boolean>(false); // State to toggle visibility of details
-  const [imageLoading, setImageLoading] = useState<boolean>(true); // State to handle image loading
+  const [showDetails, setShowDetails] = useState<boolean>(false); 
+  const [imageLoading, setImageLoading] = useState<boolean>(true); 
 
-  // Determine status class and text based on launch status
+  
   let statusClass = "launch__status--unknown";
   let statusText = "TBD";
 
@@ -45,8 +45,8 @@ const LaunchItem: React.FC<LaunchItemProps> = ({ launch }) => {
   }
 
   const getRelativeTime = (dateString: string): string => {
-    const launchDate = new Date(dateString); // UTC-based date
-    const now = new Date(); // Current UTC time
+    const launchDate = new Date(dateString); 
+    const now = new Date();
     const diffInSeconds = (now.getTime() - launchDate.getTime()) / 1000;
 
   
@@ -81,16 +81,16 @@ const LaunchItem: React.FC<LaunchItemProps> = ({ launch }) => {
   };
 
   const handleImageLoad = () => {
-    setImageLoading(false); // Image has loaded
+    setImageLoading(false); 
   };
 
   const handleImageError = () => {
-    setImageLoading(false); // Image failed to load, show a fallback
+    setImageLoading(false); 
   };
 
   return (
     <div className="p-4 rounded-lg mb-4 border-2 border-gray-300 shadow-md">
-      {/* Mission Title and Status */}
+     
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-bold">{launch.mission_name}</h3>
         <span className={`launch__status ${statusClass}`}>{statusText}</span>
@@ -128,7 +128,7 @@ const LaunchItem: React.FC<LaunchItemProps> = ({ launch }) => {
         )}
       </div>
 
-      {/* Conditionally render image and details */}
+     
       {showDetails && (
         <div className="mt-4 flex items-start">
           {launch.links.mission_patch_small ? (
@@ -162,7 +162,7 @@ const LaunchItem: React.FC<LaunchItemProps> = ({ launch }) => {
         </div>
       )}
 
-      {/* View/Hide button */}
+     
       <button
         onClick={() => setShowDetails(!showDetails)}
         className="mt-4 p-2 bg-blue-500 text-white rounded-md"
