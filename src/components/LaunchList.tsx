@@ -33,21 +33,21 @@ const LaunchList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [lazyLoading, setLazyLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
-  const [searchQuery, setSearchQuery] = useState<string>(""); // Manage the search query
-  const [debouncedSearchQuery] = useDebounce(searchQuery, 500); // Add debounced value for smooth typing
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [debouncedSearchQuery] = useDebounce(searchQuery, 500); 
   const [error, setError] = useState<string | null>(null);
-  const [filteredLaunches, setFilteredLaunches] = useState<Launch[]>([]); // Manage filtered launches
+  const [filteredLaunches, setFilteredLaunches] = useState<Launch[]>([]); 
 
   const observer = useRef<IntersectionObserver | null>(null);
 
   const lastLaunchElementRef = useCallback(
     (node: Element | null) => {
-      if (loading || debouncedSearchQuery.trim()) return; // Avoid triggering pagination during search
+      if (loading || debouncedSearchQuery.trim()) return; 
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
-          setLazyLoading(true); // Indicate that the next page is being fetched
+          setLazyLoading(true); 
           setPage((prevPage: number) => prevPage + 1);
         }
       });
@@ -66,8 +66,8 @@ const LaunchList: React.FC = () => {
         });
 
         if (reset) {
-          setLaunches(data); 
-          setAllLaunches(data); 
+          setLaunches(data);
+          setAllLaunches(data);
         } else {
           setLaunches((prevLaunches) => [...prevLaunches, ...data]);
         }
@@ -80,25 +80,25 @@ const LaunchList: React.FC = () => {
         console.error("Error fetching launches", error.message);
       } finally {
         setLoading(false);
-        setLazyLoading(false); 
+        setLazyLoading(false);
       }
     },
     [page]
   );
 
   useEffect(() => {
-    setLoading(true); 
+    setLoading(true);
     if (debouncedSearchQuery.trim() === "") {
-      setPage(1); 
+      setPage(1);
       setHasMore(true);
-      setFilteredLaunches([]); 
-      setFilteredLaunches([]); 
+      setFilteredLaunches([]);
+      setFilteredLaunches([]);
       fetchLaunches(true, 1);
     }
   }, [debouncedSearchQuery]);
 
   useEffect(() => {
-    if (debouncedSearchQuery.trim() !== "") return; 
+    if (debouncedSearchQuery.trim() !== "") return;
     fetchLaunches();
   }, [page]);
 
@@ -112,16 +112,14 @@ const LaunchList: React.FC = () => {
         )
       );
     } else {
-      setFilteredLaunches([]); 
+      setFilteredLaunches([]);
     }
   }, [debouncedSearchQuery]);
 
   return (
     <div className="p-4 flex flex-col items-center">
-     
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
-     
       {debouncedSearchQuery.trim() ? (
         <div className="relative flex flex-col w-[37vw] min-w-[338px] mt-42">
           {filteredLaunches.length === 0 ? (
@@ -165,11 +163,10 @@ const LaunchList: React.FC = () => {
         </div>
       )}
 
-      
       {lazyLoading && <Loading />}
-      
+
       {error && <p className="text-red-500 text-center">{error}</p>}
-      
+
       {!hasMore && !loading && launches.length > 0 && (
         <p className="text-center mt-4">No more launches to show</p>
       )}
