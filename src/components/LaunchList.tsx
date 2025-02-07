@@ -34,21 +34,21 @@ const LaunchList: React.FC = () => {
   const [lazyLoading, setLazyLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [debouncedSearchQuery] = useDebounce(searchQuery, 500); 
+  const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
   const [error, setError] = useState<string | null>(null);
-  const [filteredLaunches, setFilteredLaunches] = useState<Launch[]>([]); 
+  const [filteredLaunches, setFilteredLaunches] = useState<Launch[]>([]);
 
   const observer = useRef<IntersectionObserver | null>(null);
 
   const lastLaunchElementRef = useCallback(
     (node: Element | null) => {
-      if (loading || debouncedSearchQuery.trim()) return; 
+      if (loading || debouncedSearchQuery.trim()) return;
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
-          setLazyLoading(true); 
-          setPage((prevPage: number) => prevPage + 1);
+          setLazyLoading(true);
+          setPage((prevPage) => prevPage + 1);
         }
       });
 
@@ -72,12 +72,11 @@ const LaunchList: React.FC = () => {
           setLaunches((prevLaunches) => [...prevLaunches, ...data]);
         }
 
-        setHasMore(data.length > 0);
+        setHasMore(data.length === 10);
         setError(null);
       } catch (err) {
-        const error = err as Error;
         setError("Failed to load launches. Please try again.");
-        console.error("Error fetching launches", error.message);
+        console.error("Error fetching launches", err);
       } finally {
         setLoading(false);
         setLazyLoading(false);
@@ -87,18 +86,16 @@ const LaunchList: React.FC = () => {
   );
 
   useEffect(() => {
-    setLoading(true);
     if (debouncedSearchQuery.trim() === "") {
       setPage(1);
       setHasMore(true);
-      setFilteredLaunches([]);
       setFilteredLaunches([]);
       fetchLaunches(true, 1);
     }
   }, [debouncedSearchQuery]);
 
   useEffect(() => {
-    if (debouncedSearchQuery.trim() !== "") return;
+    if (debouncedSearchQuery.trim() !== "" || !hasMore) return;
     fetchLaunches();
   }, [page]);
 
@@ -114,7 +111,7 @@ const LaunchList: React.FC = () => {
     } else {
       setFilteredLaunches([]);
     }
-  }, [debouncedSearchQuery]);
+  }, [debouncedSearchQuery, allLaunches]);
 
   return (
     <div className="p-4 flex flex-col items-center">
@@ -137,29 +134,15 @@ const LaunchList: React.FC = () => {
         </div>
       ) : (
         <div className="flex flex-col w-[37vw] min-w-[338px] mt-42">
-          {launches
-            .slice()
-            .reverse()
-            .map((launch, index) => {
-              const launchContent = (
-                <div
-                  className="p-4 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out mb-4"
-                  key={launch.flight_number}
-                >
-                  <LaunchItem launch={launch} />
-                </div>
-              );
-
-              if (index === launches.length - 1) {
-                return (
-                  <div ref={lastLaunchElementRef} key={launch.flight_number}>
-                    {launchContent}
-                  </div>
-                );
-              }
-
-              return launchContent;
-            })}
+          {launches.map((launch, index) => (
+            <div
+              ref={index === launches.length - 1 ? lastLaunchElementRef : null}
+              className="p-4 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out mb-4"
+              key={launch.flight_number}
+            >
+              <LaunchItem launch={launch} />
+            </div>
+          ))}
         </div>
       )}
 

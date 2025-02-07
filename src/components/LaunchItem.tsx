@@ -26,10 +26,9 @@ interface LaunchItemProps {
 }
 
 const LaunchItem: React.FC<LaunchItemProps> = ({ launch }) => {
-  const [showDetails, setShowDetails] = useState<boolean>(false); 
-  const [imageLoading, setImageLoading] = useState<boolean>(true); 
+  const [showDetails, setShowDetails] = useState<boolean>(false);
+  const [imageLoading, setImageLoading] = useState<boolean>(true);
 
-  
   let statusClass = "launch__status--unknown";
   let statusText = "TBD";
 
@@ -39,17 +38,15 @@ const LaunchItem: React.FC<LaunchItemProps> = ({ launch }) => {
   } else if (launch.launch_success === true) {
     statusClass = "launch__status--success";
     statusText = "Success";
-  } else if (launch.upcoming === true) {
+  } else if (launch.upcoming === true && launch.launch_success === null) {
     statusClass = "launch__status--info";
     statusText = "Upcoming";
   }
 
   const getRelativeTime = (dateString: string): string => {
-    const launchDate = new Date(dateString); 
+    const launchDate = new Date(dateString);
     const now = new Date();
     const diffInSeconds = (now.getTime() - launchDate.getTime()) / 1000;
-
-  
 
     const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
     if (diffInSeconds < 60) {
@@ -81,16 +78,15 @@ const LaunchItem: React.FC<LaunchItemProps> = ({ launch }) => {
   };
 
   const handleImageLoad = () => {
-    setImageLoading(false); 
+    setImageLoading(false);
   };
 
   const handleImageError = () => {
-    setImageLoading(false); 
+    setImageLoading(false);
   };
 
   return (
     <div className="p-4 rounded-lg mb-4 border-2 border-gray-300 shadow-md">
-     
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-bold">{launch.mission_name}</h3>
         <span className={`launch__status ${statusClass}`}>{statusText}</span>
@@ -128,7 +124,6 @@ const LaunchItem: React.FC<LaunchItemProps> = ({ launch }) => {
         )}
       </div>
 
-     
       {showDetails && (
         <div className="mt-4 flex items-start">
           {launch.links.mission_patch_small ? (
@@ -162,7 +157,6 @@ const LaunchItem: React.FC<LaunchItemProps> = ({ launch }) => {
         </div>
       )}
 
-     
       <button
         onClick={() => setShowDetails(!showDetails)}
         className="mt-4 p-2 bg-blue-500 text-white rounded-md"
